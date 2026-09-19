@@ -1,0 +1,17 @@
+# Copper plate charging interface.
+connectors:
+  PLATE:
+    type: Copper charging plate
+    pinlabels: [CHARGE+, CHARGE-]
+
+  CHARGER_INTERFACE:
+    type: Charging interface
+    pinlabels: [CHARGE+, CHARGE-]
+
+cables:
+  CHARGE:
+    wirecount: 2
+    colors: [RD, BK]
+    connections:
+      - [PLATE.1, CHARGER_INTERFACE.1]
+      - [PLATE.2, CHARGER_INTERFACE.2]

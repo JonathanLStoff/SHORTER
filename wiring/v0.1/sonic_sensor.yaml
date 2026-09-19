@@ -1,0 +1,22 @@
+# HC-SR04 ultrasonic sensor.
+# HC-SR04 ECHO is commonly 5V; level-shift ECHO before connecting to an ESP32 GPIO.
+connectors:
+  HC_SR04:
+    type: HC-SR04 ultrasonic sensor
+    pinlabels: [VCC_5V, TRIG, ECHO, GND]
+
+  ESP32:
+    type: ESP32 GPIO
+    pinlabels: [5V, TRIG_GPIO, ECHO_GPIO, GND]
+
+cables:
+  SENSOR:
+    wirecount: 4
+    colors: [RD, YE, GN, BK]
+    connections:
+      - [HC_SR04.1, ESP32.1]
+      - [HC_SR04.2, ESP32.2]
+      - [HC_SR04.3, ESP32.3]
+      - [HC_SR04.4, ESP32.4]
+
+# IMPORTANT: place a suitable 5V-to-3.3V level shifter/divider between ECHO and ECHO_GPIO.

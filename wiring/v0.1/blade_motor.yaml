@@ -1,0 +1,17 @@
+# 12V 775 DC motor or NFP-RC-545SH
+connectors:
+  MOTOR:
+    type: 12V high-current DC motor
+    pinlabels: [M+, M-]
+
+  BTS7960:
+    type: BTS7960 motor controller
+    pinlabels: [M+, M-, B+, B-, RPWM, LPWM, R_EN, L_EN, VCC, GND]
+
+cables:
+  MOTOR_OUT:
+    wirecount: 2
+    colors: [RD, BK]
+    connections:
+      - [BTS7960.1, MOTOR.1]
+      - [BTS7960.2, MOTOR.2]

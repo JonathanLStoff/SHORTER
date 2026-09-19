@@ -1,0 +1,22 @@
+# Camera finder module: ESP32 kit with OV2640 + CC1101.
+connectors:
+  ESP32CAM:
+    type: ESP32 + OV2640 camera
+    pinlabels: [3V3, GND, SPI_SCK, SPI_MOSI, SPI_MISO, SPI_CS, GDO0]
+
+  CC1101:
+    type: CC1101 915MHz RF transceiver
+    pinlabels: [VCC_3V3, GND, SCK, MOSI, MISO, CSN, GDO0]
+
+cables:
+  RF:
+    wirecount: 7
+    colors: [RD, BK, OR, YE, WH, BU, GN]
+    connections:
+      - [ESP32CAM.1, CC1101.1]
+      - [ESP32CAM.2, CC1101.2]
+      - [ESP32CAM.3, CC1101.3]
+      - [ESP32CAM.4, CC1101.4]
+      - [ESP32CAM.5, CC1101.5]
+      - [ESP32CAM.6, CC1101.6]
+      - [ESP32CAM.7, CC1101.7]

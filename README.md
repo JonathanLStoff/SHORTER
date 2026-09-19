@@ -3,16 +3,36 @@ Sovereign Herbage Ordered Reducer, Trimmer and Eater by Revolution (DIY 3d print
 
 ## Possible Parts:
 
-- Acrylic: https://a.co/d/09qOomaM
+- Acrylic: (dome) https://a.co/d/09qOomaM
 - ESP32-C6: https://www.aliexpress.us/item/3256809547014521.html?spm=a2g0o.productlist.main.60.133c2a0drFp3Md&algo_pvid=4635a93e-0ae3-4e99-9eb4-70a63a7ca68e&algo_exp_id=4635a93e-0ae3-4e99-9eb4-70a63a7ca68e-57&pdp_ext_f=%7B%22order%22%3A%2215%22%2C%22eval%22%3A%221%22%2C%22fromPage%22%3A%22search%22%7D&pdp_npi=6%40dis%21USD%2114.53%211.09%21%21%2196.94%217.26%21%402103128817894325116666466e0df8%2112000049982298488%21sea%21US%210%21ABX%211%210%21n_tag%3A-29910%3Bd%3A7579a117%3Bm03_new_user%3A-29895%3BpisId%3A5000000210788688&curPageLogUid=v69VHnixOZFR&utparam-url=scene%3Asearch%7Cquery_from%3A%7Cx_object_id%3A1005009733329273%7C_p_origin_prod%3A
 - 2x Drive motor TT Motor GM37-3530 or Greartisan 37mm Gear Motor https://www.aliexpress.us/item/3256807619270536.html?spm=a2g0o.productlist.main.5.399aj9Rwj9Rwd7&algo_pvid=a2821607-4c50-4445-b177-cacc6d35bd26&algo_exp_id=a2821607-4c50-4445-b177-cacc6d35bd26-4&pdp_ext_f=%7B%22order%22%3A%22435%22%2C%22eval%22%3A%221%22%2C%22fromPage%22%3A%22search%22%7D&pdp_npi=6%40dis%21USD%2118.97%218.73%21%21%21126.62%2158.25%21%402101c4b817895103748356576e0f58%2112000042262018463%21sea%21US%210%21ABX%211%210%21n_tag%3A-29910%3Bd%3A7579a117%3Bm03_new_user%3A-29895&curPageLogUid=5lUkBumQEjij&utparam-url=scene%3Asearch%7Cquery_from%3A%7Cx_object_id%3A1005007805585288%7C_p_origin_prod%3A
 - Blade motor: 12V 775 DC Motor or NFP-RC-545SH https://www.aliexpress.us/item/3256807638419493.html?spm=a2g0o.productlist.main.1.240a4365yhog2i&algo_pvid=a546a9bc-32b2-44e2-a0e2-dfa5bbe15c90&algo_exp_id=a546a9bc-32b2-44e2-a0e2-dfa5bbe15c90-0&pdp_ext_f=%7B%22order%22%3A%2295%22%2C%22eval%22%3A%221%22%2C%22fromPage%22%3A%22search%22%7D&pdp_npi=6%40dis%21USD%2114.56%216.10%21%21%2197.22%2140.76%21%402101e5ab17895108496223192e0c7c%2112000042343745125%21sea%21US%210%21ABX%211%210%21n_tag%3A-29910%3Bd%3A7579a117%3Bm03_new_user%3A-29895%3BpisId%3A5000000210788678&curPageLogUid=WScbQV3IUf4I&utparam-url=scene%3Asearch%7Cquery_from%3A%7Cx_object_id%3A1005007824734245%7C_p_origin_prod%3A
 - Gyro GY-521 MPU-6050 MPU6050
-- Bumper: KW12-3 PCB Micro Switch
-- Sonic sensor: HC-SR04 HCSR04
-- Motor controller: L298N Motor Driver Board
-- Coil Power Relay DPDT LY2NJ HH62P HHC68A-2Z
+- 4x+ Bumper: KW12-3 PCB Micro Switch
+- Motor controller: BTS7960 https://www.aliexpress.us/item/3256811668284674.html?spm=a2g0o.productlist.main.1.17a773d8lWJkBr&algo_pvid=75e28d95-ee3d-4d04-9899-8843bd0ca35f&algo_exp_id=75e28d95-ee3d-4d04-9899-8843bd0ca35f-0&pdp_ext_f=%7B%22order%22%3A%22350%22%2C%22eval%22%3A%221%22%2C%22fromPage%22%3A%22search%22%7D&pdp_npi=6%40dis%21USD%2112.53%215.64%21%21%2183.49%2137.57%21%402101e56817898232850426778e0f09%2112000056788275262%21sea%21US%21877809079%21X%211%210%21n_tag%3A-29919%3Bd%3A7579a117%3Bm03_new_user%3A-29895&curPageLogUid=lzPGdo34u8pF&utparam-url=scene%3Asearch%7Cquery_from%3A%7Cx_object_id%3A1005011854599426%7C_p_origin_prod%3A
+- Coil Power Relay DPDT LY2NJ HH62P HHC68A-2Z (fuse?)
 - Copper plate for charging
-- NEO-6M GPS Module
 - tinned copper conductor with a thick, high-density polyethylene (HDPE) or heavy-duty PE jacket
-- O rings
+- O ring cord 1mm: https://www.aliexpress.us/item/3256812104765869.html?spm=a2g0o.productlist.main.1.12bfO2k1O2k1Go&algo_pvid=23085630-f72e-4930-8b36-bd7a46f206c5&algo_exp_id=23085630-f72e-4930-8b36-bd7a46f206c5-0&pdp_ext_f=%7B%22order%22%3A%22111%22%2C%22eval%22%3A%221%22%2C%22fromPage%22%3A%22search%22%7D&pdp_npi=6%40dis%21USD%218.74%211.09%21%21%2158.34%217.27%21%4021032e4e17896921415755661e0d4b%2112000057991064566%21sea%21US%210%21ABX%211%210%21n_tag%3A-29910%3Bd%3A7579a117%3Bm03_new_user%3A-29895%3BpisId%3A5000000210788688&curPageLogUid=8kfkCnWW7sCl&utparam-url=scene%3Asearch%7Cquery_from%3A%7Cx_object_id%3A1005012291080621%7C_p_origin_prod%3A
+- filament for waterproof-needing parts (PETG): https://www.amazon.com/SUNLU-Filament-PETG-1-75mm-Stringing/dp/B0FGTQJTM4/ref=sr_1_3?crid=185AWINTNGBOF&dib=eyJ2IjoiMSJ9.hbuxV5DHX1m8BomAUpJ435ULYSTP3nsvNuB0eCOjmTpXBud2AVol2m__xwWNfxNVo7w8dRSeANOlIR2WeHiUEdJgZv0g9Bg2lz2Aob9SYTCR9LV1RnXGMAdWUz5EyenhQf4mopNZFclVMx9aPpQg6YmONJRl0DLiy_DFNouVzyEwW_F4euJ8c4DE1EtIuhIZMzBK4lkCIB4Cx44R28M_IwqHMUkPL1Z95375Y86A3qg.mkFJjTltQXPYNFHAU3JMvi5YKdRKfhLat_jRdodc9kE&dib_tag=se&keywords=petg+filament+blue&qid=1789691704&sprefix=petg+filament+b%2Caps%2C355&sr=8-3
+
+### Triangulation module:
+- NEO-6M GPS Module
+- 4x CC1101 915 MHz RF Transceiver Module (1 for robot, 3 for in triangulation)
+- 3x ESP32-C3 (For indoor use) https://www.aliexpress.us/item/3256807018729495.html?spm=a2g0o.productlist.main.6.5a69630e4fcC21&algo_pvid=d73d5b39-fc97-4fe5-b9c1-1f25de5a243d&algo_exp_id=d73d5b39-fc97-4fe5-b9c1-1f25de5a243d-5&pdp_ext_f=%7B%22order%22%3A%2210821%22%2C%22eval%22%3A%221%22%2C%22fromPage%22%3A%22search%22%7D&pdp_npi=6%40dis%21USD%212.60%211.09%21%21%212.60%211.09%21%402103129017898217235876899e0f3f%2112000039797197683%21sea%21US%210%21ABX%211%210%21n_tag%3A-29910%3Bd%3A7579a117%3Bm03_new_user%3A-29895%3BpisId%3A5000000210788678&curPageLogUid=94fORqR8qHtx&utparam-url=scene%3Asearch%7Cquery_from%3A%7Cx_object_id%3A1005007205044247%7C_p_origin_prod%3A
+
+### Base Station finder module:
+- ESP-32 kit with OV2640: https://www.aliexpress.us/item/3256808099197404.html?spm=a2g0o.productlist.main.1.b25d3114qR0Y2T&algo_pvid=8bf2bee0-073c-4426-8590-c89e027198ab&algo_exp_id=8bf2bee0-073c-4426-8590-c89e027198ab-0&pdp_ext_f=%7B%22order%22%3A%223830%22%2C%22eval%22%3A%221%22%2C%22fromPage%22%3A%22search%22%7D&pdp_npi=6%40dis%21USD%217.55%211.09%21%21%2150.32%217.28%21%402103081117898212825507483e0dcc%2112000044479259248%21sea%21US%210%21ABX%211%210%21n_tag%3A-29910%3Bd%3A7579a117%3Bm03_new_user%3A-29895%3BpisId%3A5000000210788678&curPageLogUid=bxr5ns6Qa9cx&utparam-url=scene%3Asearch%7Cquery_from%3A%7Cx_object_id%3A1005008285512156%7C_p_origin_prod%3A
+(also using the cc1101 for this)
+### Base Station:
+- 14.6V 10A LiFePO4 Battery Charger https://a.co/d/04Ycegk0
+- QR code
+- CC1101 915 MHz RF Transceiver Module
+- ESP32-C3 https://www.aliexpress.us/item/3256807018729495.html?spm=a2g0o.productlist.main.6.5a69630e4fcC21&algo_pvid=d73d5b39-fc97-4fe5-b9c1-1f25de5a243d&algo_exp_id=d73d5b39-fc97-4fe5-b9c1-1f25de5a243d-5&pdp_ext_f=%7B%22order%22%3A%2210821%22%2C%22eval%22%3A%221%22%2C%22fromPage%22%3A%22search%22%7D&pdp_npi=6%40dis%21USD%212.60%211.09%21%21%212.60%211.09%21%402103129017898217235876899e0f3f%2112000039797197683%21sea%21US%210%21ABX%211%210%21n_tag%3A-29910%3Bd%3A7579a117%3Bm03_new_user%3A-29895%3BpisId%3A5000000210788678&curPageLogUid=94fORqR8qHtx&utparam-url=scene%3Asearch%7Cquery_from%3A%7Cx_object_id%3A1005007205044247%7C_p_origin_prod%3A
+- Acrylic: (dome) https://a.co/d/09qOomaM
+
+
+### Extras that might be useful:
+- Sonic sensor: HC-SR04 HCSR04 (distance sensor/material sensor)
+
+

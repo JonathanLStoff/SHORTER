@@ -1,0 +1,18 @@
+# One TT/GM37-3530 or Greartisan 37mm geared drive motor.
+# Reuse this file twice: DRIVE-L and DRIVE-R.
+connectors:
+  MOTOR:
+    type: DC gear motor
+    pinlabels: [M+, M-]
+
+  BTS7960:
+    type: BTS7960 motor controller
+    pinlabels: [M+, M-, B+, B-, RPWM, LPWM, R_EN, L_EN, VCC, GND]
+
+cables:
+  MOTOR_OUT:
+    wirecount: 2
+    colors: [RD, BK]
+    connections:
+      - [BTS7960.1, MOTOR.1]
+      - [BTS7960.2, MOTOR.2]

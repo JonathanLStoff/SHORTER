@@ -1,0 +1,40 @@
+# One BTS7960 module. Reuse this file for each of the two drive motors
+# and the blade motor if the current requirements are appropriate.
+connectors:
+  LOGIC:
+    type: ESP32 control
+    pinlabels: [RPWM, LPWM, R_EN, L_EN, VCC_5V, GND]
+
+  POWER:
+    type: Motor supply
+    pinlabels: [B+, B-]
+
+  MOTOR:
+    type: DC motor
+    pinlabels: [M+, M-]
+
+cables:
+  LOGIC:
+    wirecount: 6
+    colors: [YE, GN, WH, BU, RD, BK]
+    connections:
+      - [LOGIC.1, LOGIC.1]
+      - [LOGIC.2, LOGIC.2]
+      - [LOGIC.3, LOGIC.3]
+      - [LOGIC.4, LOGIC.4]
+      - [LOGIC.5, LOGIC.5]
+      - [LOGIC.6, LOGIC.6]
+
+  MOTOR_POWER:
+    wirecount: 2
+    colors: [RD, BK]
+    connections:
+      - [POWER.1, POWER.1]
+      - [POWER.2, POWER.2]
+
+  MOTOR:
+    wirecount: 2
+    colors: [RD, BK]
+    connections:
+      - [MOTOR.1, MOTOR.1]
+      - [MOTOR.2, MOTOR.2]

@@ -1,0 +1,106 @@
+# Main ESP32-C6 controller
+connectors:
+  ESP32C6:
+    type: ESP32-C6 controller
+    pinlabels: [5V, GND, 3V3, SPI_SCK, SPI_MOSI, SPI_MISO, SPI_CS, SPI_INT, I2C_SDA, I2C_SCL, UART_TX, UART_RX, BUMPER, BLADE_PWM, BLADE_EN, DRIVE_L_RPWM, DRIVE_L_LPWM, DRIVE_R_RPWM, DRIVE_R_LPWM]
+
+  POWER:
+    type: DC power
+    pinlabels: [5V, GND]
+
+  CC1101:
+    type: 915MHz CC1101
+    pinlabels: [VCC_3V3, GND, SCK, MOSI, MISO, CSN, GDO0]
+
+  MPU6050:
+    type: GY-521 MPU-6050
+    pinlabels: [VCC, GND, SCL, SDA, INT]
+
+  BUMPER_BUS:
+    type: Bumper switch bus
+    pinlabels: [SW1, SW2, SW3, SW4, GND]
+
+  DRIVE_LEFT:
+    type: BTS7960 left drive
+    pinlabels: [RPWM, LPWM, R_EN, L_EN, VCC, GND]
+
+  DRIVE_RIGHT:
+    type: BTS7960 right drive
+    pinlabels: [RPWM, LPWM, R_EN, L_EN, VCC, GND]
+
+  BLADE:
+    type: BTS7960 blade controller
+    pinlabels: [RPWM, LPWM, R_EN, L_EN, VCC, GND]
+
+cables:
+  POWER_IN:
+    wirecount: 2
+    colors: [RD, BK]
+    connections:
+      - [POWER.1, ESP32C6.1]
+      - [POWER.2, ESP32C6.2]
+
+  RF_SPI:
+    wirecount: 7
+    colors: [OR, RD, WH, BL, BK, GN, YE]
+    connections:
+      - [ESP32C6.4, CC1101.3]
+      - [ESP32C6.5, CC1101.4]
+      - [ESP32C6.6, CC1101.5]
+      - [ESP32C6.7, CC1101.6]
+      - [ESP32C6.8, CC1101.7]
+      - [ESP32C6.3, CC1101.1]
+      - [ESP32C6.2, CC1101.2]
+
+  IMU_I2C:
+    wirecount: 5
+    colors: [RD, BK, YE, GN, WH]
+    connections:
+      - [ESP32C6.3, MPU6050.1]
+      - [ESP32C6.2, MPU6050.2]
+      - [ESP32C6.10, MPU6050.3]
+      - [ESP32C6.9, MPU6050.4]
+      - [ESP32C6.8, MPU6050.5]
+
+  BUMPERS:
+    wirecount: 5
+    colors: [WH, GN, BU, YE, BK]
+    connections:
+      - [ESP32C6.13, BUMPER_BUS.1]
+      - [ESP32C6.13, BUMPER_BUS.2]
+      - [ESP32C6.13, BUMPER_BUS.3]
+      - [ESP32C6.13, BUMPER_BUS.4]
+      - [ESP32C6.2, BUMPER_BUS.5]
+
+  DRIVE_LEFT_CTRL:
+    wirecount: 6
+    colors: [YE, GN, WH, BU, RD, BK]
+    connections:
+      - [ESP32C6.16, DRIVE_LEFT.1]
+      - [ESP32C6.17, DRIVE_LEFT.2]
+      - [ESP32C6.3, DRIVE_LEFT.3]
+      - [ESP32C6.3, DRIVE_LEFT.4]
+      - [ESP32C6.1, DRIVE_LEFT.5]
+      - [ESP32C6.2, DRIVE_LEFT.6]
+
+  DRIVE_RIGHT_CTRL:
+    wirecount: 6
+    colors: [YE, GN, WH, BU, RD, BK]
+    connections:
+      - [ESP32C6.18, DRIVE_RIGHT.1]
+      - [ESP32C6.19, DRIVE_RIGHT.2]
+      - [ESP32C6.3, DRIVE_RIGHT.3]
+      - [ESP32C6.3, DRIVE_RIGHT.4]
+      - [ESP32C6.1, DRIVE_RIGHT.5]
+      - [ESP32C6.2, DRIVE_RIGHT.6]
+
+  BLADE_CTRL:
+    wirecount: 6
+    colors: [YE, GN, WH, BU, RD, BK]
+    connections:
+      - [ESP32C6.14, BLADE.1]
+      - [ESP32C6.15, BLADE.2]
+      - [ESP32C6.3, BLADE.3]
+      - [ESP32C6.3, BLADE.4]
+      - [ESP32C6.1, BLADE.5]
+      - [ESP32C6.2, BLADE.6]

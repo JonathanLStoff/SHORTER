@@ -1,0 +1,17 @@
+# 14.6V 10A LiFePO4 charger.
+connectors:
+  CHARGER:
+    type: 14.6V 10A LiFePO4 charger
+    pinlabels: [AC_L, AC_N, DC+, DC-]
+
+  CHARGE_PLATE:
+    type: Copper charging plate
+    pinlabels: [CHARGE+, CHARGE-]
+
+cables:
+  DC_CHARGE:
+    wirecount: 2
+    colors: [RD, BK]
+    connections:
+      - [CHARGER.3, CHARGE_PLATE.1]
+      - [CHARGER.4, CHARGE_PLATE.2]

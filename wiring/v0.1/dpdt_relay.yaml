@@ -1,0 +1,39 @@
+# Generic DPDT LY2NJ / HH62P / HHC68A-2Z relay.
+# Verify actual socket terminal numbers before building.
+connectors:
+  RELAY:
+    type: DPDT relay
+    pinlabels: [COIL_A, COIL_B, COM1, NO1, NC1, COM2, NO2, NC2]
+
+  COIL_DRIVER:
+    type: Relay driver
+    pinlabels: [COIL+, COIL-]
+
+  LOAD:
+    type: Switched DC load
+    pinlabels: [IN+, OUT+, IN-, OUT-]
+
+cables:
+  COIL:
+    wirecount: 2
+    colors: [RD, BK]
+    connections:
+      - [COIL_DRIVER.1, RELAY.1]
+      - [COIL_DRIVER.2, RELAY.2]
+
+  DPDT_POS:
+    wirecount: 2
+    colors: [RD, WH]
+    connections:
+      - [LOAD.1, RELAY.3]
+      - [LOAD.2, RELAY.4]
+
+  DPDT_NEG:
+    wirecount: 2
+    colors: [BK, GN]
+    connections:
+      - [LOAD.3, RELAY.6]
+      - [LOAD.4, RELAY.7]
+
+# If used for polarity reversal, wire the two poles as an H-bridge.
+# If used only as a power relay, one pole can be sufficient.

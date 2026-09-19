@@ -1,0 +1,33 @@
+# Base station electronics.
+connectors:
+  ESP32C3:
+    type: ESP32-C3 controller
+    pinlabels: [3V3, GND, SPI_SCK, SPI_MOSI, SPI_MISO, SPI_CS, GDO0]
+
+  CC1101:
+    type: CC1101 915MHz RF transceiver
+    pinlabels: [VCC_3V3, GND, SCK, MOSI, MISO, CSN, GDO0]
+
+  POWER:
+    type: Regulated 3.3V supply
+    pinlabels: [3V3, GND]
+
+cables:
+  RF:
+    wirecount: 7
+    colors: [RD, BK, OR, YE, WH, BU, GN]
+    connections:
+      - [ESP32C3.1, CC1101.1]
+      - [ESP32C3.2, CC1101.2]
+      - [ESP32C3.3, CC1101.3]
+      - [ESP32C3.4, CC1101.4]
+      - [ESP32C3.5, CC1101.5]
+      - [ESP32C3.6, CC1101.6]
+      - [ESP32C3.7, CC1101.7]
+
+  POWER:
+    wirecount: 2
+    colors: [RD, BK]
+    connections:
+      - [POWER.1, ESP32C3.1]
+      - [POWER.2, ESP32C3.2]

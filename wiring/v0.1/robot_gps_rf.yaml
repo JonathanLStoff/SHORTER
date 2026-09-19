@@ -1,0 +1,36 @@
+# Robot-side triangulation electronics:
+# NEO-6M GPS + one CC1101 connected to the main ESP32-C6.
+connectors:
+  ESP32C6:
+    type: ESP32-C6 controller
+    pinlabels: [3V3, GND, GPS_TX, GPS_RX, SPI_SCK, SPI_MOSI, SPI_MISO, SPI_CS, RF_GDO0]
+
+  GPS:
+    type: NEO-6M GPS
+    pinlabels: [VCC, GND, TX, RX]
+
+  CC1101:
+    type: CC1101 915MHz RF transceiver
+    pinlabels: [VCC_3V3, GND, SCK, MOSI, MISO, CSN, GDO0]
+
+cables:
+  GPS:
+    wirecount: 4
+    colors: [RD, BK, YE, GN]
+    connections:
+      - [ESP32C6.1, GPS.1]
+      - [ESP32C6.2, GPS.2]
+      - [ESP32C6.3, GPS.3]
+      - [ESP32C6.4, GPS.4]
+
+  RF:
+    wirecount: 7
+    colors: [RD, BK, OR, YE, WH, BU, GN]
+    connections:
+      - [ESP32C6.1, CC1101.1]
+      - [ESP32C6.2, CC1101.2]
+      - [ESP32C6.5, CC1101.3]
+      - [ESP32C6.6, CC1101.4]
+      - [ESP32C6.7, CC1101.5]
+      - [ESP32C6.8, CC1101.6]
+      - [ESP32C6.9, CC1101.7]

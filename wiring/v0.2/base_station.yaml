@@ -1,0 +1,89 @@
+metadata:
+  title: Base Station
+  description: >
+    Charging base station. Contains an ESP32-C3 and CC1101
+    915 MHz transceiver for communication, a 14.6 V 10 A
+    LiFePO4 battery charger, and a DPDT relay that switches
+    the charger output onto the copper charging plate.
+    A QR code marker is mounted on top for the mower bot's
+    camera base finder, and an acrylic dome covers the
+    electronics.
+
+connectors:
+  ESP32C3:
+    type: ESP32-C3 Dev Board
+    pins:
+      - 5V
+      - 3V3
+      - GND1
+      - GND2
+      - GND3
+      - GPIO4
+      - GPIO5
+      - GPIO6
+      - GPIO7
+      - GPIO8
+      - GPIO9
+      - GPIO10
+  CC1101:
+    type: CC1101 915 MHz RF Transceiver
+    pins: [VCC, GND, SI, SO, SCLK, CSN, GDO0, GDO2]
+  CHARGER:
+    type: 14.6V 10A LiFePO4 Battery Charger
+    pins: [AC_L, AC_N, DC_V+, DC_V-]
+  RELAY:
+    type: LY2NJ DPDT Power Relay
+    pins: [COIL_A, COIL_B, COM1, NC1, NO1, COM2, NC2, NO2]
+  PLATE:
+    type: Copper Charging Plate
+    pins: [POS, NEG]
+  PSU:
+    type: 5V USB Power Supply
+    pins: [5V, GND]
+
+cables:
+  W_PWR:
+    gauge: 26 AWG
+    length: 0.2
+    colors: [RD, BK]
+  W_SPI:
+    gauge: 26 AWG
+    length: 0.15
+    colors: [RD, BK, BU, GN, YE, OG, VT, GY]
+  W_RELAY:
+    gauge: 26 AWG
+    length: 0.2
+    colors: [RD, BK]
+  W_CHG:
+    gauge: 14 AWG
+    length: 0.3
+    colors: [RD, BK]
+  W_PLATE:
+    gauge: 14 AWG
+    length: 0.3
+    wirecount: 1
+    colors: [RD]
+
+connections:
+  # --- 5 V power to ESP32-C3 ---
+  - [PSU: 5V,  W_PWR: 1, ESP32C3: 5V]
+  - [PSU: GND, W_PWR: 2, ESP32C3: GND1]
+
+  # --- CC1101 SPI link ---
+  - [ESP32C3: 3V3,   W_SPI: 1, CC1101: VCC]
+  - [ESP32C3: GND2,  W_SPI: 2, CC1101: GND]
+  - [ESP32C3: GPIO4, W_SPI: 3, CC1101: SI]
+  - [ESP32C3: GPIO5, W_SPI: 4, CC1101: SO]
+  - [ESP32C3: GPIO6, W_SPI: 5, CC1101: SCLK]
+  - [ESP32C3: GPIO7, W_SPI: 6, CC1101: CSN]
+  - [ESP32C3: GPIO8, W_SPI: 7, CC1101: GDO0]
+  - [ESP32C3: GPIO9, W_SPI: 8, CC1101: GDO2]
+
+  # --- Relay coil driven by ESP32-C3 ---
+  - [ESP32C3: GPIO10, W_RELAY: 1, RELAY: COIL_A]
+  - [ESP32C3: GND3,   W_RELAY: 2, RELAY: COIL_B]
+
+  # --- Charger DC output -> relay -> copper plate ---
+  - [CHARGER: DC_V+, W_CHG: 1, RELAY: COM1]
+  - [CHARGER: DC_V-, W_CHG: 2, PLATE: NEG]
+  - [RELAY: NO1,     W_PLATE: 1, PLATE: POS]

@@ -1,0 +1,288 @@
+metadata:
+  title: Mower Bot
+  description: >
+    Autonomous mower bot. Main controller is an ESP32-C6.
+    An ESP32-CAM with OV2640 acts as the base-station finder
+    and forwards detection data to the ESP32-C6 over UART.
+    Includes CC1101 915 MHz radio, NEO-6M GPS, MPU-6050 IMU,
+    two GM37-3530 drive motors, a 775 DC blade motor, three
+    BTS7960 drivers, four KW12-3 bumper switches, an HC-SR04
+    ultrasonic sensor, a charging relay, and copper charging
+    contacts. Power comes from a LiFePO4 pack via a 5 V buck.
+
+connectors:
+  ESP32C6:
+    type: ESP32-C6 Dev Board
+    pins:
+      - 5V_1
+      - 5V_2
+      - 5V_3
+      - 5V_4
+      - 5V_5
+      - 5V_6
+      - 3V3_1
+      - 3V3_2
+      - 3V3_3
+      - 3V3_4
+      - 3V3_5
+      - GND_1
+      - GND_2
+      - GND_3
+      - GND_4
+      - GND_5
+      - GND_6
+      - GND_7
+      - GND_8
+      - GND_9
+      - GND_10
+      - GND_11
+      - GPIO0
+      - GPIO4
+      - GPIO5
+      - GPIO6
+      - GPIO7
+      - GPIO8
+      - GPIO9
+      - GPIO10
+      - GPIO11
+      - GPIO12
+      - GPIO13
+      - GPIO14
+      - GPIO15
+      - GPIO16
+      - GPIO17
+      - GPIO18
+      - GPIO19
+      - GPIO20
+      - GPIO21
+      - GPIO22
+      - GPIO23
+      - GPIO24
+      - GPIO25
+      - GPIO26
+      - GPIO27
+      - GPIO28
+      - GPIO29
+      - GPIO30
+
+  CAM:
+    type: ESP32-CAM with OV2640 (Base Finder)
+    pins: [5V, GND, TX, RX]
+
+  CC1101:
+    type: CC1101 915 MHz RF Transceiver
+    pins: [VCC, GND, SI, SO, SCLK, CSN, GDO0, GDO2]
+
+  GPS:
+    type: NEO-6M GPS Module
+    pins: [VCC, GND, TX, RX]
+
+  IMU:
+    type: GY-521 MPU-6050
+    pins: [VCC, GND, SDA, SCL]
+
+  SONAR:
+    type: HC-SR04 Ultrasonic Sensor
+    pins: [VCC, GND, TRIG, ECHO]
+
+  BUMPERS:
+    type: 4x KW12-3 Micro Switch Array
+    pins: [SW1, SW2, SW3, SW4, GND]
+
+  BTS_L:
+    type: BTS7960 (Left Drive Motor Driver)
+    pins: [VCC, GND, R_EN, L_EN, RPWM, LPWM, B+, B-, M+, M-]
+
+  BTS_R:
+    type: BTS7960 (Right Drive Motor Driver)
+    pins: [VCC, GND, R_EN, L_EN, RPWM, LPWM, B+, B-, M+, M-]
+
+  BTS_B:
+    type: BTS7960 (Blade Motor Driver)
+    pins: [VCC, GND, R_EN, L_EN, RPWM, LPWM, B+, B-, M+, M-]
+
+  MOT_L:
+    type: GM37-3530 Drive Motor (Left)
+    pins: [M+, M-]
+
+  MOT_R:
+    type: GM37-3530 Drive Motor (Right)
+    pins: [M+, M-]
+
+  MOT_B:
+    type: 775 DC Blade Motor
+    pins: [M+, M-]
+
+  RELAY_CHG:
+    type: LY2NJ DPDT Relay (Charging)
+    pins: [COIL_A, COIL_B, COM1, NC1, NO1, COM2, NC2, NO2]
+
+  PLATE:
+    type: Copper Charging Contacts
+    pins: [POS, NEG]
+
+  BATT:
+    type: LiFePO4 Battery Pack
+    pins: [B+1, B+2, B+3, B+4, B+5, B-1, B-2, B-3, B-4, B-5]
+
+  BUCK:
+    type: 5V Buck Converter
+    pins: [VIN+, VIN-, VOUT+, VOUT-]
+
+cables:
+  W_BATT:
+    gauge: 14 AWG
+    length: 0.3
+    colors: [RD, BK]
+  W_PWR_5V:
+    gauge: 22 AWG
+    length: 0.3
+    colors: [RD, BK]
+  W_SPI:
+    gauge: 26 AWG
+    length: 0.2
+    colors: [RD, BK, BU, GN, YE, OG, VT, GY]
+  W_UART_GPS:
+    gauge: 26 AWG
+    length: 0.3
+    colors: [RD, BK, GN, BU]
+  W_UART_CAM:
+    gauge: 26 AWG
+    length: 0.2
+    colors: [RD, BK, GN, BU]
+  W_I2C:
+    gauge: 26 AWG
+    length: 0.2
+    colors: [RD, BK, BU, GN]
+  W_SONAR:
+    gauge: 26 AWG
+    length: 0.2
+    colors: [RD, BK, OG, YE]
+  W_BUMP:
+    gauge: 26 AWG
+    length: 0.3
+    colors: [BU, GN, YE, OG, BK]
+  W_BTS_L:
+    gauge: 26 AWG
+    length: 0.2
+    colors: [RD, BK, BU, GN, YE, OG]
+  W_BTS_R:
+    gauge: 26 AWG
+    length: 0.2
+    colors: [RD, BK, BU, GN, YE, OG]
+  W_BTS_B:
+    gauge: 26 AWG
+    length: 0.2
+    colors: [RD, BK, BU]
+  W_MOT_L:
+    gauge: 16 AWG
+    length: 0.2
+    colors: [RD, BK]
+  W_MOT_R:
+    gauge: 16 AWG
+    length: 0.2
+    colors: [RD, BK]
+  W_MOT_B:
+    gauge: 16 AWG
+    length: 0.2
+    colors: [RD, BK]
+  W_RELAY:
+    gauge: 26 AWG
+    length: 0.2
+    colors: [RD, BK]
+  W_CHG:
+    gauge: 14 AWG
+    length: 0.2
+    colors: [RD, BK]
+
+connections:
+  # ================= Power =================
+  - [BATT: B+1, W_BATT: 1, BUCK: VIN+]
+  - [BATT: B-1, W_BATT: 2, BUCK: VIN-]
+  - [BUCK: VOUT+, W_PWR_5V: 1, ESP32C6: 5V_1]
+  - [BUCK: VOUT-, W_PWR_5V: 2, ESP32C6: GND_1]
+
+  # Motor drivers fed directly from the battery
+  - [BATT: B+2, BTS_L: B+]
+  - [BATT: B-2, BTS_L: B-]
+  - [BATT: B+3, BTS_R: B+]
+  - [BATT: B-3, BTS_R: B-]
+  - [BATT: B+4, BTS_B: B+]
+  - [BATT: B-4, BTS_B: B-]
+
+  # ================= CC1101 (SPI) =================
+  - [ESP32C6: 3V3_1, W_SPI: 1, CC1101: VCC]
+  - [ESP32C6: GND_2, W_SPI: 2, CC1101: GND]
+  - [ESP32C6: GPIO4, W_SPI: 3, CC1101: SI]
+  - [ESP32C6: GPIO5, W_SPI: 4, CC1101: SO]
+  - [ESP32C6: GPIO6, W_SPI: 5, CC1101: SCLK]
+  - [ESP32C6: GPIO7, W_SPI: 6, CC1101: CSN]
+  - [ESP32C6: GPIO8, W_SPI: 7, CC1101: GDO0]
+  - [ESP32C6: GPIO9, W_SPI: 8, CC1101: GDO2]
+
+  # ================= GPS (UART) =================
+  - [ESP32C6: 3V3_2,  W_UART_GPS: 1, GPS: VCC]
+  - [ESP32C6: GND_3,  W_UART_GPS: 2, GPS: GND]
+  - [ESP32C6: GPIO10, W_UART_GPS: 3, GPS: TX]
+  - [ESP32C6: GPIO11, W_UART_GPS: 4, GPS: RX]
+
+  # ========= ESP32-CAM base finder (UART to main ESP32-C6) =========
+  - [ESP32C6: 5V_2,   W_UART_CAM: 1, CAM: 5V]
+  - [ESP32C6: GND_4,  W_UART_CAM: 2, CAM: GND]
+  - [ESP32C6: GPIO12, W_UART_CAM: 3, CAM: TX]
+  - [ESP32C6: GPIO13, W_UART_CAM: 4, CAM: RX]
+
+  # ================= IMU (I2C) =================
+  - [ESP32C6: 3V3_3,  W_I2C: 1, IMU: VCC]
+  - [ESP32C6: GND_5,  W_I2C: 2, IMU: GND]
+  - [ESP32C6: GPIO14, W_I2C: 3, IMU: SDA]
+  - [ESP32C6: GPIO15, W_I2C: 4, IMU: SCL]
+
+  # ================= Ultrasonic =================
+  - [ESP32C6: 5V_3,   W_SONAR: 1, SONAR: VCC]
+  - [ESP32C6: GND_6,  W_SONAR: 2, SONAR: GND]
+  - [ESP32C6: GPIO29, W_SONAR: 3, SONAR: TRIG]
+  - [ESP32C6: GPIO30, W_SONAR: 4, SONAR: ECHO]
+
+  # ================= Bumper switches =================
+  - [ESP32C6: GPIO25, W_BUMP: 1, BUMPERS: SW1]
+  - [ESP32C6: GPIO26, W_BUMP: 2, BUMPERS: SW2]
+  - [ESP32C6: GPIO27, W_BUMP: 3, BUMPERS: SW3]
+  - [ESP32C6: GPIO28, W_BUMP: 4, BUMPERS: SW4]
+  - [ESP32C6: GND_7,  W_BUMP: 5, BUMPERS: GND]
+
+  # ================= Left drive driver =================
+  - [ESP32C6: 5V_4,   W_BTS_L: 1, BTS_L: VCC]
+  - [ESP32C6: GND_8,  W_BTS_L: 2, BTS_L: GND]
+  - [ESP32C6: GPIO16, W_BTS_L: 3, BTS_L: R_EN]
+  - [ESP32C6: GPIO17, W_BTS_L: 4, BTS_L: L_EN]
+  - [ESP32C6: GPIO18, W_BTS_L: 5, BTS_L: RPWM]
+  - [ESP32C6: GPIO19, W_BTS_L: 6, BTS_L: LPWM]
+  - [BTS_L: M+, W_MOT_L: 1, MOT_L: M+]
+  - [BTS_L: M-, W_MOT_L: 2, MOT_L: M-]
+
+  # ================= Right drive driver =================
+  - [ESP32C6: 5V_5,   W_BTS_R: 1, BTS_R: VCC]
+  - [ESP32C6: GND_9,  W_BTS_R: 2, BTS_R: GND]
+  - [ESP32C6: GPIO20, W_BTS_R: 3, BTS_R: R_EN]
+  - [ESP32C6: GPIO21, W_BTS_R: 4, BTS_R: L_EN]
+  - [ESP32C6: GPIO22, W_BTS_R: 5, BTS_R: RPWM]
+  - [ESP32C6: GPIO23, W_BTS_R: 6, BTS_R: LPWM]
+  - [BTS_R: M+, W_MOT_R: 1, MOT_R: M+]
+  - [BTS_R: M-, W_MOT_R: 2, MOT_R: M-]
+
+  # ================= Blade driver =================
+  - [ESP32C6: 5V_6,   W_BTS_B: 1, BTS_B: VCC]
+  - [ESP32C6: GND_10, W_BTS_B: 2, BTS_B: GND]
+  - [ESP32C6: 3V3_4,  BTS_B: R_EN]
+  - [ESP32C6: 3V3_5,  BTS_B: L_EN]
+  - [ESP32C6: GPIO24, W_BTS_B: 3, BTS_B: RPWM]
+  - [BTS_B: M+, W_MOT_B: 1, MOT_B: M+]
+  - [BTS_B: M-, W_MOT_B: 2, MOT_B: M-]
+
+  # ================= Charging relay & copper contacts =================
+  - [ESP32C6: GPIO0,  W_RELAY: 1, RELAY_CHG: COIL_A]
+  - [ESP32C6: GND_11, W_RELAY: 2, RELAY_CHG: COIL_B]
+  - [PLATE: POS,      W_CHG: 1,   RELAY_CHG: COM1]
+  - [RELAY_CHG: NO1,  W_CHG: 2,   BATT: B+5]
+  - [PLATE: NEG,                  BATT: B-5]

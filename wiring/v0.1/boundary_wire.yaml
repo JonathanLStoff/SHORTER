@@ -1,0 +1,17 @@
+# Boundary/guide wire: tinned copper conductor with thick PE/HDPE jacket.
+# This is a passive conductor; electrical connection depends on the sensing design.
+connectors:
+  SENSOR_A:
+    type: Boundary wire termination
+    pinlabels: [BOUNDARY]
+
+  SENSOR_B:
+    type: Boundary wire termination
+    pinlabels: [BOUNDARY]
+
+cables:
+  BOUNDARY:
+    wirecount: 1
+    colors: [GN]
+    connections:
+      - [SENSOR_A.1, SENSOR_B.1]

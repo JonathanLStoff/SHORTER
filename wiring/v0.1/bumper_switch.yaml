@@ -1,0 +1,20 @@
+# One KW12-3 bumper switch. Reuse this file for every bumper.
+connectors:
+  SWITCH:
+    type: KW12-3 PCB micro switch
+    pinlabels: [COM, NO, NC]
+
+  MCU:
+    type: ESP32 GPIO
+    pinlabels: [GPIO, GND]
+
+cables:
+  BUMPER:
+    wirecount: 2
+    colors: [WH, BK]
+    connections:
+      - [SWITCH.1, MCU.1]
+      - [SWITCH.2, MCU.2]
+
+# Use COM + NO for a normally-open bumper input.
+# NC is left unused unless fail-safe logic is desired.
