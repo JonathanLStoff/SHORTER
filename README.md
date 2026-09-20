@@ -15,7 +15,8 @@ Sovereign Herbage Ordered Reducer, Trimmer and Eater by Revolution (DIY 3d print
 - tinned copper conductor with a thick, high-density polyethylene (HDPE) or heavy-duty PE jacket
 - O ring cord 1mm: https://www.aliexpress.us/item/3256812104765869.html?spm=a2g0o.productlist.main.1.12bfO2k1O2k1Go&algo_pvid=23085630-f72e-4930-8b36-bd7a46f206c5&algo_exp_id=23085630-f72e-4930-8b36-bd7a46f206c5-0&pdp_ext_f=%7B%22order%22%3A%22111%22%2C%22eval%22%3A%221%22%2C%22fromPage%22%3A%22search%22%7D&pdp_npi=6%40dis%21USD%218.74%211.09%21%21%2158.34%217.27%21%4021032e4e17896921415755661e0d4b%2112000057991064566%21sea%21US%210%21ABX%211%210%21n_tag%3A-29910%3Bd%3A7579a117%3Bm03_new_user%3A-29895%3BpisId%3A5000000210788688&curPageLogUid=8kfkCnWW7sCl&utparam-url=scene%3Asearch%7Cquery_from%3A%7Cx_object_id%3A1005012291080621%7C_p_origin_prod%3A
 - filament for waterproof-needing parts (PETG): https://www.amazon.com/SUNLU-Filament-PETG-1-75mm-Stringing/dp/B0FGTQJTM4/ref=sr_1_3?crid=185AWINTNGBOF&dib=eyJ2IjoiMSJ9.hbuxV5DHX1m8BomAUpJ435ULYSTP3nsvNuB0eCOjmTpXBud2AVol2m__xwWNfxNVo7w8dRSeANOlIR2WeHiUEdJgZv0g9Bg2lz2Aob9SYTCR9LV1RnXGMAdWUz5EyenhQf4mopNZFclVMx9aPpQg6YmONJRl0DLiy_DFNouVzyEwW_F4euJ8c4DE1EtIuhIZMzBK4lkCIB4Cx44R28M_IwqHMUkPL1Z95375Y86A3qg.mkFJjTltQXPYNFHAU3JMvi5YKdRKfhLat_jRdodc9kE&dib_tag=se&keywords=petg+filament+blue&qid=1789691704&sprefix=petg+filament+b%2Caps%2C355&sr=8-3
-
+- Buck converter 12v to 5v: https://www.aliexpress.us/item/3256808617601570.html?spm=a2g0o.productlist.main.2.46a85684SbpDzZ&algo_pvid=684b7c19-a73e-4da2-9082-26c086ad6ff1&algo_exp_id=684b7c19-a73e-4da2-9082-26c086ad6ff1-1&pdp_ext_f=%7B%22order%22%3A%22279%22%2C%22eval%22%3A%221%22%2C%22fromPage%22%3A%22search%22%7D&pdp_npi=6%40dis%21USD%212.79%212.67%21%21%2118.62%2117.81%21%402103138417899176050153707e0d70%2112000046730983465%21sea%21US%21877809079%21X%211%210%21n_tag%3A-29919%3Bd%3A7579a117%3Bm03_new_user%3A-29895&curPageLogUid=iBIuO998Okek&utparam-url=scene%3Asearch%7Cquery_from%3A%7Cx_object_id%3A1005008803916322%7C_p_origin_prod%3A
+- Blades https://a.co/d/00TkhfZo
 ### Triangulation module:
 - NEO-6M GPS Module
 - 4x CC1101 915 MHz RF Transceiver Module (1 for robot, 3 for in triangulation)
@@ -34,5 +35,5 @@ Sovereign Herbage Ordered Reducer, Trimmer and Eater by Revolution (DIY 3d print
 
 ### Extras that might be useful:
 - Sonic sensor: HC-SR04 HCSR04 (distance sensor/material sensor)
-
+- Wired connectors screws: https://a.co/d/0j6jmUwY || https://www.aliexpress.com/ssr/300000512/BundleDeals2?spm=a2g0o.productlist.main.3.1eae1b7cuKXEw3&productIds=1005001677869988%3A12000030016966535&pha_manifest=ssr&_immersiveMode=true&disableNav=YES&sourceName=SEARCHProduct&utparam-url=scene%3Asearch%7Cquery_from%3A%7Cx_object_id%3A1005001677869988%7C_p_origin_prod%3A&pvid=9969fa57-b486-43ab-9b1b-8424ce25f190
 
