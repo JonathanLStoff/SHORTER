@@ -134,6 +134,27 @@ cables:
     gauge: 14 AWG
     length: 0.3
     colors: [RD, BK]
+  W_BATT_L:
+    gauge: 14 AWG
+    length: 0.2
+    colors: [RD, BK]
+  W_BATT_R:
+    gauge: 14 AWG
+    length: 0.2
+    colors: [RD, BK]
+  W_BATT_B:
+    gauge: 14 AWG
+    length: 0.2
+    colors: [RD, BK]
+  W_BATT_NEG:
+    gauge: 14 AWG
+    length: 0.2
+    wirecount: 1
+    colors: [BK]
+  W_BTS_EN:
+    gauge: 26 AWG
+    length: 0.2
+    colors: [RD, BK]
   W_PWR_5V:
     gauge: 22 AWG
     length: 0.3
@@ -202,13 +223,13 @@ connections:
   - [BUCK: VOUT+, W_PWR_5V: 1, ESP32C6: 5V_1]
   - [BUCK: VOUT-, W_PWR_5V: 2, ESP32C6: GND_1]
 
-  # Motor drivers fed directly from the battery
-  - [BATT: B+2, BTS_L: B+]
-  - [BATT: B-2, BTS_L: B-]
-  - [BATT: B+3, BTS_R: B+]
-  - [BATT: B-3, BTS_R: B-]
-  - [BATT: B+4, BTS_B: B+]
-  - [BATT: B-4, BTS_B: B-]
+  # Motor drivers fed directly from the battery (via short tap cables)
+  - [BATT: B+2, W_BATT_L: 1, BTS_L: B+]
+  - [BATT: B-2, W_BATT_L: 2, BTS_L: B-]
+  - [BATT: B+3, W_BATT_R: 1, BTS_R: B+]
+  - [BATT: B-3, W_BATT_R: 2, BTS_R: B-]
+  - [BATT: B+4, W_BATT_B: 1, BTS_B: B+]
+  - [BATT: B-4, W_BATT_B: 2, BTS_B: B-]
 
   # ================= CC1101 (SPI) =================
   - [ESP32C6: 3V3_1, W_SPI: 1, CC1101: VCC]
@@ -274,8 +295,8 @@ connections:
   # ================= Blade driver =================
   - [ESP32C6: 5V_6,   W_BTS_B: 1, BTS_B: VCC]
   - [ESP32C6: GND_10, W_BTS_B: 2, BTS_B: GND]
-  - [ESP32C6: 3V3_4,  BTS_B: R_EN]
-  - [ESP32C6: 3V3_5,  BTS_B: L_EN]
+  - [ESP32C6: 3V3_4,  W_BTS_EN: 1, BTS_B: R_EN]
+  - [ESP32C6: 3V3_5,  W_BTS_EN: 2, BTS_B: L_EN]
   - [ESP32C6: GPIO24, W_BTS_B: 3, BTS_B: RPWM]
   - [BTS_B: M+, W_MOT_B: 1, MOT_B: M+]
   - [BTS_B: M-, W_MOT_B: 2, MOT_B: M-]
@@ -285,4 +306,4 @@ connections:
   - [ESP32C6: GND_11, W_RELAY: 2, RELAY_CHG: COIL_B]
   - [PLATE: POS,      W_CHG: 1,   RELAY_CHG: COM1]
   - [RELAY_CHG: NO1,  W_CHG: 2,   BATT: B+5]
-  - [PLATE: NEG,                  BATT: B-5]
+  - [PLATE: NEG,      W_BATT_NEG: 1, BATT: B-5]

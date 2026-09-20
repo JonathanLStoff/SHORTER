@@ -18,15 +18,14 @@ else
 endif
 
 # Find the latest version folder (e.g., v0.2 > v0.1)
-# Uses `sort -V` for version-aware sorting
 LATEST_VERSION := $(shell \
     find $(WIRING_DIR) -maxdepth 1 -type d -name 'v*' -print 2>/dev/null \
     | sort -V \
     | tail -n 1 \
 )
 
-# All YAML files inside the latest version folder
-LATEST_YAMLS := $(wildcard $(LATEST_VERSION)/*.yml)
+# All YAML files (both .yml and .yaml) inside the latest version folder
+LATEST_YAMLS := $(shell find $(LATEST_VERSION) -maxdepth 1 -type f \( -name '*.yml' -o -name '*.yaml' \) 2>/dev/null)
 
 .PHONY: all install export clean help
 
@@ -55,7 +54,7 @@ ifeq ($(strip $(LATEST_VERSION)),)
 	@exit 1
 endif
 ifeq ($(strip $(LATEST_YAMLS)),)
-	@echo "❌ No .yml files found in $(LATEST_VERSION)."
+	@echo "❌ No .yml or .yaml files found in $(LATEST_VERSION)."
 	@exit 1
 endif
 	@echo "📂 Using latest version: $(LATEST_VERSION)"
