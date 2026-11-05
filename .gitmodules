@@ -1,0 +1,3 @@
+[submodule "hoverboard-firmware-hack-GD32"]
+	path = hoverboard-firmware-hack-GD32
+	url = https://github.com/RoboDurden/Hoverboard-Firmware-Hack-Gen2.x-GD32

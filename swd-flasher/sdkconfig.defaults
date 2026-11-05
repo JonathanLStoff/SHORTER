@@ -1,0 +1,7 @@
+# Log on BOTH USB-C ports of the DevKit:
+#  - "UART" port (USB-UART bridge, e.g. /dev/cu.usbmodem58CF0836051 or /dev/cu.usbserial-*): primary console on UART0
+#  - native USB port (USB JTAG/serial debug unit, /dev/cu.usbmodem101): secondary console (output only)
+CONFIG_ESP_CONSOLE_UART_DEFAULT=y
+CONFIG_ESP_CONSOLE_SECONDARY_USB_SERIAL_JTAG=y
+CONFIG_ESPTOOLPY_FLASHSIZE_4MB=y
+CONFIG_ESP_DEFAULT_CPU_FREQ_MHZ_160=y

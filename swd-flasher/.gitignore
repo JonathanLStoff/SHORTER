@@ -1,0 +1,9 @@
+.venv/
+.pio/
+build/
+sdkconfig
+sdkconfig.*.old
+test/sim_test
+test/sim_test.dSYM/
+src/fw_images.c
+.build-hoverboard/
