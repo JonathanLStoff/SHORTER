@@ -49,6 +49,7 @@ int swd_connect(swd_t *s);
 int swd_mem_read32(swd_t *s, uint32_t addr, uint32_t *v);
 int swd_mem_write32(swd_t *s, uint32_t addr, uint32_t v);
 int swd_mem_write16(swd_t *s, uint32_t addr, uint16_t v);
+int swd_mem_write8(swd_t *s, uint32_t addr, uint8_t v);
 // Read `words` 32-bit words (addr must be 4-aligned). Handles TAR wrap at 1 KB.
 int swd_mem_read_block(swd_t *s, uint32_t addr, uint32_t *buf, size_t words);
 // Returns SWD_OK if the DP has no sticky error flags set (and clears them if it has).

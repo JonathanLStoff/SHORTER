@@ -1,0 +1,333 @@
+metadata:
+  title: Mower Bot
+  description: >
+    Autonomous mower bot. Main controller is an ESP32-C6.
+    Drive: a split-board hoverboard (two GD32E230 motor controller
+    boards with hub motors). The ESP32-C6 commands both wheels over
+    the MASTER board's SWD debug header. The slave board takes its
+    orders from the master over the stock master-slave cable. Full
+    hoverboard detail: wiring/hoverboard.md.
+    Power: Greenworks battery (a modified 40 V model, final voltage
+    TBD) feeds the hoverboard boards and the blade motor driver; a
+    buck to 5 V feeds the ESP32-C6. One battery connector splits into
+    two wires per side, one pair to each hoverboard board.
+    Also: CC1101 915 MHz radio, NEO-6M GPS, MPU-6050 IMU, BTS7960
+    blade driver, four KW12-3 bumper switches, charging relay and
+    copper charging contacts, and an HLK-LD2410D 24 GHz radar
+    being retro-fitted to tell grass from concrete. Camera base
+    finder kept from v0.2 (undecided).
+    Pin plan for the peripherals is not final (see PLANNING.md).
+
+connectors:
+  ESP32C6:
+    type: ESP32-C6 Dev Board
+    pins:
+      - 5V_1
+      - 5V_2
+      - 5V_3
+      - 5V_4
+      - 3V3_1
+      - 3V3_2
+      - 3V3_3
+      - 3V3_4
+      - 3V3_5
+      - GND_1
+      - GND_2
+      - GND_3
+      - GND_4
+      - GND_5
+      - GND_6
+      - GND_7
+      - GND_8
+      - GND_9
+      - GND_10
+      - GPIO0
+      - GPIO1
+      - GPIO4
+      - GPIO5
+      - GPIO6
+      - GPIO7
+      - GPIO8
+      - GPIO9
+      - GPIO10
+      - GPIO11
+      - GPIO12
+      - GPIO13
+      - GPIO14
+      - GPIO15
+      - GPIO16
+      - GPIO17
+      - GPIO18
+      - GPIO19
+      - GPIO24
+      - GPIO25
+      - GPIO26
+      - GPIO27
+      - GPIO28
+
+  HB_MASTER:
+    type: Hoverboard MASTER board (GD32E230, layout 2.3.2)
+    notes: Power button here. SWD header order from the 3.3V end - 3.3V, SWCLK, SWDIO, GND. Leave 3.3V unconnected.
+    pins: [SWD_3V3, SWD_SWCLK, SWD_SWDIO, SWD_GND, BAT+, BAT-, LINK_TX, LINK_RX, PHASE_Y, PHASE_B, PHASE_G, HALL_VCC, HALL_GND, HALL_A, HALL_B, HALL_C]
+
+  HB_SLAVE:
+    type: Hoverboard SLAVE board (GD32E230, layout 2.3.2)
+    notes: Orders only from the master. Powered from its own pair of the split battery connector.
+    pins: [BAT+, BAT-, LINK_TX, LINK_RX, PHASE_Y, PHASE_B, PHASE_G, HALL_VCC, HALL_GND, HALL_A, HALL_B, HALL_C]
+
+  HUB_M:
+    type: Hub motor (master side), BLDC + 3 halls
+    pins: [PHASE_Y, PHASE_B, PHASE_G, HALL_VCC, HALL_GND, HALL_A, HALL_B, HALL_C]
+
+  HUB_S:
+    type: Hub motor (slave side), BLDC + 3 halls
+    pins: [PHASE_Y, PHASE_B, PHASE_G, HALL_VCC, HALL_GND, HALL_A, HALL_B, HALL_C]
+
+  CAM:
+    type: ESP32-CAM with OV2640 (Base Finder, undecided)
+    pins: [5V, GND, TX, RX]
+
+  CC1101:
+    type: CC1101 915 MHz RF Transceiver
+    pins: [VCC, GND, SI, SO, SCLK, CSN, GDO0, GDO2]
+
+  GPS:
+    type: NEO-6M GPS Module
+    pins: [VCC, GND, TX, RX]
+
+  IMU:
+    type: GY-521 MPU-6050
+    pins: [VCC, GND, SDA, SCL]
+
+  BUMPERS:
+    type: 4x KW12-3 Micro Switch Array
+    pins: [SW1, SW2, SW3, SW4, GND]
+
+  BTS_B:
+    type: BTS7960 (Blade Motor Driver)
+    pins: [VCC, GND, R_EN, L_EN, RPWM, LPWM, B+, B-, M+, M-]
+
+  MOT_B:
+    type: Blade motor (24 V, model TBD)
+    pins: [M+, M-]
+
+  RELAY_CHG:
+    type: LY2NJ DPDT Relay (Charging, keeps the plates dead off the dock)
+    pins: [COIL_A, COIL_B, COM1, NC1, NO1, COM2, NC2, NO2]
+
+  PLATE:
+    type: Copper Charging Contacts
+    pins: [POS, NEG]
+
+  RADAR:
+    type: HLK-LD2410D 24 GHz radar (grass vs concrete)
+    notes: LD2410-family 5-pin header. Supply 5 V, logic 3.3 V, UART 256000 baud default - verify against the LD2410D datasheet.
+    pins: [VCC, GND, TX, RX, OUT]
+
+  BATT:
+    type: Greenworks battery (modified 40 V model, voltage TBD)
+    pins: [B+1, B+2, B+3, B+4, B+5, B-1, B-2, B-3, B-4, B-5]
+
+  BUCK:
+    type: Battery to 5 V Buck Converter
+    pins: [VIN+, VIN-, VOUT+, VOUT-]
+
+cables:
+  W_BATT:
+    gauge: 22 AWG
+    length: 0.3
+    colors: [RD, BK]
+  W_BATT_HBM:
+    gauge: 14 AWG
+    length: 0.3
+    colors: [RD, BK]
+  W_BATT_HBS:
+    gauge: 14 AWG
+    length: 0.3
+    colors: [RD, BK]
+  W_BATT_B:
+    gauge: 14 AWG
+    length: 0.2
+    colors: [RD, BK]
+  W_BATT_NEG:
+    gauge: 14 AWG
+    length: 0.2
+    wirecount: 1
+    colors: [BK]
+  W_SWD:
+    gauge: 26 AWG
+    length: 0.2
+    colors: [YE, GN, BK]
+  W_LINK:
+    gauge: 26 AWG
+    length: 0.5
+    notes: stock master-slave cable, other wires to verify
+    colors: [WH, GN]
+  W_PHASE_M:
+    gauge: 14 AWG
+    length: 0.2
+    colors: [YE, BU, GN]
+  W_PHASE_S:
+    gauge: 14 AWG
+    length: 0.2
+    colors: [YE, BU, GN]
+  W_HALL_M:
+    gauge: 26 AWG
+    length: 0.2
+    colors: [RD, BK, YE, BU, GN]
+  W_HALL_S:
+    gauge: 26 AWG
+    length: 0.2
+    colors: [RD, BK, YE, BU, GN]
+  W_BTS_EN:
+    gauge: 26 AWG
+    length: 0.2
+    colors: [RD, BK]
+  W_PWR_5V:
+    gauge: 22 AWG
+    length: 0.3
+    colors: [RD, BK]
+  W_SPI:
+    gauge: 26 AWG
+    length: 0.2
+    colors: [RD, BK, BU, GN, YE, OG, VT, GY]
+  W_UART_GPS:
+    gauge: 26 AWG
+    length: 0.3
+    colors: [RD, BK, GN, BU]
+  W_UART_CAM:
+    gauge: 26 AWG
+    length: 0.2
+    colors: [RD, BK, GN, BU]
+  W_I2C:
+    gauge: 26 AWG
+    length: 0.2
+    colors: [RD, BK, BU, GN]
+  W_BUMP:
+    gauge: 26 AWG
+    length: 0.3
+    colors: [BU, GN, YE, OG, BK]
+  W_BTS_B:
+    gauge: 26 AWG
+    length: 0.2
+    colors: [RD, BK, BU]
+  W_MOT_B:
+    gauge: 16 AWG
+    length: 0.2
+    colors: [RD, BK]
+  W_RADAR:
+    gauge: 26 AWG
+    length: 0.3
+    colors: [RD, BK, GN, BU, YE]
+  W_RELAY:
+    gauge: 26 AWG
+    length: 0.2
+    colors: [RD, BK]
+  W_CHG:
+    gauge: 14 AWG
+    length: 0.2
+    colors: [RD, BK]
+
+connections:
+  # ================= Power (Greenworks battery, voltage TBD) =================
+  - [BATT: B+1, W_BATT: 1, BUCK: VIN+]
+  - [BATT: B-1, W_BATT: 2, BUCK: VIN-]
+  - [BUCK: VOUT+, W_PWR_5V: 1, ESP32C6: 5V_1]
+  - [BUCK: VOUT-, W_PWR_5V: 2, ESP32C6: GND_1]
+
+  # Hoverboard boards: one battery connector split into two wires per side (measured)
+  - [BATT: B+2, W_BATT_HBM: 1, HB_MASTER: BAT+]
+  - [BATT: B-2, W_BATT_HBM: 2, HB_MASTER: BAT-]
+  - [BATT: B+3, W_BATT_HBS: 1, HB_SLAVE: BAT+]
+  - [BATT: B-3, W_BATT_HBS: 2, HB_SLAVE: BAT-]
+
+  # Blade driver from the battery
+  - [BATT: B+4, W_BATT_B: 1, BTS_B: B+]
+  - [BATT: B-4, W_BATT_B: 2, BTS_B: B-]
+
+  # ================= Hoverboard drive =================
+  # SWD to the MASTER debug header (swd-flasher connector 1). 3.3V pin left open.
+  - [ESP32C6: GPIO1, W_SWD: 1, HB_MASTER: SWD_SWCLK]
+  - [ESP32C6: GPIO0, W_SWD: 2, HB_MASTER: SWD_SWDIO]
+  - [ESP32C6: GND_2, W_SWD: 3, HB_MASTER: SWD_GND]
+
+  # Stock master-slave link (USART1 PA2/PA3, 115200), crossed
+  - [HB_MASTER: LINK_TX, W_LINK: 1, HB_SLAVE: LINK_RX]
+  - [HB_MASTER: LINK_RX, W_LINK: 2, HB_SLAVE: LINK_TX]
+
+  # Hub motors (stock cables)
+  - [HB_MASTER: PHASE_Y, W_PHASE_M: 1, HUB_M: PHASE_Y]
+  - [HB_MASTER: PHASE_B, W_PHASE_M: 2, HUB_M: PHASE_B]
+  - [HB_MASTER: PHASE_G, W_PHASE_M: 3, HUB_M: PHASE_G]
+  - [HB_MASTER: HALL_VCC, W_HALL_M: 1, HUB_M: HALL_VCC]
+  - [HB_MASTER: HALL_GND, W_HALL_M: 2, HUB_M: HALL_GND]
+  - [HB_MASTER: HALL_A, W_HALL_M: 3, HUB_M: HALL_A]
+  - [HB_MASTER: HALL_B, W_HALL_M: 4, HUB_M: HALL_B]
+  - [HB_MASTER: HALL_C, W_HALL_M: 5, HUB_M: HALL_C]
+  - [HB_SLAVE: PHASE_Y, W_PHASE_S: 1, HUB_S: PHASE_Y]
+  - [HB_SLAVE: PHASE_B, W_PHASE_S: 2, HUB_S: PHASE_B]
+  - [HB_SLAVE: PHASE_G, W_PHASE_S: 3, HUB_S: PHASE_G]
+  - [HB_SLAVE: HALL_VCC, W_HALL_S: 1, HUB_S: HALL_VCC]
+  - [HB_SLAVE: HALL_GND, W_HALL_S: 2, HUB_S: HALL_GND]
+  - [HB_SLAVE: HALL_A, W_HALL_S: 3, HUB_S: HALL_A]
+  - [HB_SLAVE: HALL_B, W_HALL_S: 4, HUB_S: HALL_B]
+  - [HB_SLAVE: HALL_C, W_HALL_S: 5, HUB_S: HALL_C]
+
+  # ================= CC1101 (SPI) — pins carried over from v0.2, not final =================
+  - [ESP32C6: 3V3_1, W_SPI: 1, CC1101: VCC]
+  - [ESP32C6: GND_3, W_SPI: 2, CC1101: GND]
+  - [ESP32C6: GPIO4, W_SPI: 3, CC1101: SI]
+  - [ESP32C6: GPIO5, W_SPI: 4, CC1101: SO]
+  - [ESP32C6: GPIO6, W_SPI: 5, CC1101: SCLK]
+  - [ESP32C6: GPIO7, W_SPI: 6, CC1101: CSN]
+  - [ESP32C6: GPIO8, W_SPI: 7, CC1101: GDO0]
+  - [ESP32C6: GPIO9, W_SPI: 8, CC1101: GDO2]
+
+  # ================= GPS (UART) =================
+  - [ESP32C6: 3V3_2,  W_UART_GPS: 1, GPS: VCC]
+  - [ESP32C6: GND_4,  W_UART_GPS: 2, GPS: GND]
+  - [ESP32C6: GPIO10, W_UART_GPS: 3, GPS: TX]
+  - [ESP32C6: GPIO11, W_UART_GPS: 4, GPS: RX]
+
+  # ========= ESP32-CAM base finder (undecided, unchanged from v0.2) =========
+  - [ESP32C6: 5V_2,   W_UART_CAM: 1, CAM: 5V]
+  - [ESP32C6: GND_5,  W_UART_CAM: 2, CAM: GND]
+  - [ESP32C6: GPIO12, W_UART_CAM: 3, CAM: TX]
+  - [ESP32C6: GPIO13, W_UART_CAM: 4, CAM: RX]
+
+  # ================= IMU (I2C) =================
+  - [ESP32C6: 3V3_3,  W_I2C: 1, IMU: VCC]
+  - [ESP32C6: GND_6,  W_I2C: 2, IMU: GND]
+  - [ESP32C6: GPIO14, W_I2C: 3, IMU: SDA]
+  - [ESP32C6: GPIO15, W_I2C: 4, IMU: SCL]
+
+  # ================= Bumper switches — pins carried over from v0.2, not final =================
+  - [ESP32C6: GPIO25, W_BUMP: 1, BUMPERS: SW1]
+  - [ESP32C6: GPIO26, W_BUMP: 2, BUMPERS: SW2]
+  - [ESP32C6: GPIO27, W_BUMP: 3, BUMPERS: SW3]
+  - [ESP32C6: GPIO28, W_BUMP: 4, BUMPERS: SW4]
+  - [ESP32C6: GND_7,  W_BUMP: 5, BUMPERS: GND]
+
+  # ================= Blade driver =================
+  - [ESP32C6: 5V_3,   W_BTS_B: 1, BTS_B: VCC]
+  - [ESP32C6: GND_8,  W_BTS_B: 2, BTS_B: GND]
+  - [ESP32C6: 3V3_4,  W_BTS_EN: 1, BTS_B: R_EN]
+  - [ESP32C6: 3V3_5,  W_BTS_EN: 2, BTS_B: L_EN]
+  - [ESP32C6: GPIO24, W_BTS_B: 3, BTS_B: RPWM]
+  - [BTS_B: M+, W_MOT_B: 1, MOT_B: M+]
+  - [BTS_B: M-, W_MOT_B: 2, MOT_B: M-]
+
+  # ===== LD2410D radar (pins from the GPIOs freed by dropping the drive BTS7960s, not final) =====
+  - [ESP32C6: 5V_4,   W_RADAR: 1, RADAR: VCC]
+  - [ESP32C6: GND_10, W_RADAR: 2, RADAR: GND]
+  - [ESP32C6: GPIO17, W_RADAR: 3, RADAR: TX]
+  - [ESP32C6: GPIO18, W_RADAR: 4, RADAR: RX]
+  - [ESP32C6: GPIO19, W_RADAR: 5, RADAR: OUT]
+
+  # ================= Charging relay & copper contacts =================
+  # Relay coil moved off GPIO0 (now SWDIO). Needs a driver transistor in practice (v0.1 dpdt_relay.yaml).
+  - [ESP32C6: GPIO16, W_RELAY: 1, RELAY_CHG: COIL_A]
+  - [ESP32C6: GND_9,  W_RELAY: 2, RELAY_CHG: COIL_B]
+  - [PLATE: POS,      W_CHG: 1,   RELAY_CHG: COM1]
+  - [RELAY_CHG: NO1,  W_CHG: 2,   BATT: B+5]
+  - [PLATE: NEG,      W_BATT_NEG: 1, BATT: B-5]

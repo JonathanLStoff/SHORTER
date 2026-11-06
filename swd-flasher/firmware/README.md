@@ -1,47 +1,40 @@
 # Controller firmware images
 
-The flasher embeds the image(s) here and writes them to the motor controllers. With the default
-single connector (`NUM_TARGETS 1`) only `target_a.bin` is used, and it is written to **every** board
-you connect, so put in the image for the board you are about to plug in, and remove it before
-switching boards (see the top-level README, "Flashing a board"). To restore the stock firmware,
-copy `../backup/master_stock.bin` (or `slave_stock.bin`) here as `target_a.bin`.
+`master.bin` and `slave.bin` are built by `scripts/build_hoverboard.py` (see `*.build.txt` next to
+each one for the commit, layout, sha256 and mailbox placement). Do not hand-edit them.
 
-With `NUM_TARGETS 2` (each board on its own pins):
+Full interface: `../API.md`.
 
-| File | Flashed to | Purpose |
+| Image | Role | Control |
 |---|---|---|
-| `target_a.bin` | board A (SWCLK=GPIO1, SWDIO=GPIO0) | `SLAVE_ID 0` |
-| `target_b.bin` | board B (SWCLK=GPIO2, SWDIO=GPIO3) | `SLAVE_ID 1` |
+| `master.bin` | MASTER, layout E230 2 (2.3.2) | RAM mailbox v2 (`MBX2`) at 0x20001800, written by the ESP32 over SWD (`overlay/Src/remoteDebugPort.c`). One command per wheel, LEDs of both boards, power off. Drives its wheel and relays the slave wheel + slave LEDs over USART1 (PA2/PA3). Stops both wheels 600 ms after the last heartbeat |
+| `slave.bin` | SLAVE, layout E230 2 | No mailbox. Only master frames over USART1: wheel, LEDs, disable, switch off. 800 ms frame watchdog. Replies with current, speed, odometry and its hall state |
 
-If `target_b.bin` is missing, `target_a.bin` is used for both boards. The two boards then
-share a `SLAVE_ID` and will both answer every command on the UART bus, so build two images.
-With no images the flasher only reads a backup of each board it finds (see
-`scripts/capture_dump.py`), turns green, and never writes anything.
+Both images:
+- No foot-pad / IMU / balance code. The main loop reads no input pins.
+- Hall sensors only commutate the motor and are reported. Hall order `HALL_A = PB11`, `HALL_B = PC14`,
+  `HALL_C = PA1`, the stock order (`analysis/CONTROL_MAP.md`).
+- LEDs (green PB3, orange PA15, red PB4, upper PF1, lower PB5) are driven only from the debug port.
+  Off at boot.
+- No inactivity, low-battery or button power-off, no beeps except one 150 ms boot beep (master).
+- Protections: hardware overcurrent break (PB12, as stock), dead time 60, 2.5 A software limit per
+  board, gates off on an invalid hall state, and "off" now really clears POEN.
 
-After changing a `.bin`, run `pio run -t upload`; `scripts/gen_images.py` regenerates `src/fw_images.c` automatically.
+Build: `.venv/bin/python scripts/build_hoverboard.py master` (or `slave`). The build fails unless the
+compiler sees the intended role, layout, pins and protections, and the mailbox contract matches.
+Tests: `analysis/run_tests.sh`.
 
-## Building the images (old plan: ESP32 controls the boards over UART)
+## Flashing (not done yet: needs an explicit go-ahead, one board at a time)
 
-> Superseded: there are no spare holes for a UART link, so control will go over the debug port
-> instead (custom RAM-mailbox mode, not written yet). The configuration steps below (layout,
-> `REMOTE_AUTODETECT` off, `genericGD32E230C8`) still apply.
+The flasher only embeds `target_a.bin`. Copy the image there, build the ESP32 with `pio run`, plug in
+exactly one board, and remove `target_a.bin` again before the next board. Restore stock with
+`../backup/master_stock.bin` or `../backup/slave_stock.bin`.
 
-The GD32 firmware already supports an ESP32 acting as master (`REMOTE_UARTBUS`): 19200 baud on
-the master-slave header (PA2/PA3), one frame per command
-`{'/', type, slave id, speed, steer, state flags, CRC}`, and a reply with battery voltage,
-current, speed and odometer. Motors stop if no command arrives for 500 ms. No firmware code
-changes are needed, only configuration, in
-`hoverboard-firmware-hack-GD32/HoverBoardGigaDevice/Inc/configDebug.h`:
+The slave currently on the board is **not** this image: it has the earlier build, which was SINGLE
+with the REMOTE_DUMMY zigzag test (and layout 2.3.1). See `../CURRENT_STATE.md`.
 
-1. Comment out `#define REMOTE_AUTODETECT` (line 4). That mode spins the motors to find the
-   hall pins and is only meant for a current-limited bench supply.
-2. In the `#else` branch set `LAYOUT` to the layout that matches **your PCB** (the version
-   printed on the board, e.g. 2.1.x). A wrong layout drives the wrong pins. Do not guess.
-3. Choose `#define SINGLE` (each board independent, which is what the ESP32 bus expects).
-4. Comment out `#define REMOTE_DUMMY` and enable `#define REMOTE_UARTBUS`, with
-   `#define SLAVE_ID 0` for `target_a.bin`, then `1` for `target_b.bin`.
-5. Build `genericGD32E230C8` (`TARGET=3`) with PlatformIO in `HoverBoardGigaDevice/`
-   and copy `.pio/build/genericGD32E230C8/firmware.bin` here. Build once per `SLAVE_ID`.
+## Why the old images were wrong
 
-The E230 target is marked "not yet tested" upstream. Bench-test with a current-limited supply
-(1-2 A) and the wheels off the ground.
+The build script edited `configDebug.h`, but the compiler reads `config.h` unless `CONFIG_DEBUG` is
+defined. So the "slave" was a SINGLE board on the zigzag test remote with layout 2.3.1. Fixed in the
+script: `CONFIG_DEBUG` is enabled and the build checks the preprocessed macros.

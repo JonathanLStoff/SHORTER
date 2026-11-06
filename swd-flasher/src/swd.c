@@ -307,6 +307,17 @@ static int swd_mem_write16_once(swd_t *s, uint32_t addr, uint16_t v)
     return ap_write(s, AP_DRW, (uint32_t)v << ((addr & 2) * 8));
 }
 
+static int swd_mem_write8_once(swd_t *s, uint32_t addr, uint8_t v)
+{
+    int rc;
+    if ((rc = set_csw(s, CSW_SIZE8)))
+        return rc;
+    if ((rc = ap_write(s, AP_TAR, addr)))
+        return rc;
+    // Data travels on the byte lane selected by addr[1:0]
+    return ap_write(s, AP_DRW, (uint32_t)v << ((addr & 3) * 8));
+}
+
 static int swd_mem_read_block_once(swd_t *s, uint32_t addr, uint32_t *buf, size_t words)
 {
     int rc;
@@ -361,6 +372,7 @@ static int recoverable(int rc)
 int swd_mem_read32(swd_t *s, uint32_t addr, uint32_t *v) { RETRY_OP(swd_mem_read32_once(s, addr, v)); }
 int swd_mem_write32(swd_t *s, uint32_t addr, uint32_t v) { RETRY_OP(swd_mem_write32_once(s, addr, v)); }
 int swd_mem_write16(swd_t *s, uint32_t addr, uint16_t v) { RETRY_OP(swd_mem_write16_once(s, addr, v)); }
+int swd_mem_write8(swd_t *s, uint32_t addr, uint8_t v) { RETRY_OP(swd_mem_write8_once(s, addr, v)); }
 static int read_block_retry(swd_t *s, uint32_t addr, uint32_t *buf, size_t words)
 {
     RETRY_OP(swd_mem_read_block_once(s, addr, buf, words));

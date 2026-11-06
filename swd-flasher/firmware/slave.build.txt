@@ -1,0 +1,7 @@
+role: slave
+layout: E230 2
+firmware commit: c63b29a
+sha256: ec382df592552b0109fb5badf73c5cda4553755fc3d4fd0e582ab2bf3cf6cd7f
+size: 23672
+mailbox: none (slave takes orders from the master frame only)  bss_end: 0x200002a4  stack_top: 0x20002000
+current limit: 2.5 A   heartbeat timeout: 600 ms (master)   frame timeout: 800 ms (slave)

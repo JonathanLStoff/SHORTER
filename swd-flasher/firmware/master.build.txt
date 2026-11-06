@@ -1,0 +1,7 @@
+role: master
+layout: E230 2
+firmware commit: c63b29a
+sha256: 257906d9814e5d6431919c2811f5b2f1b06257eebfa176e083a83848a31d00c9
+size: 23536
+mailbox: 0x20001800 (0x54 bytes, magic MBX2)  bss_end: 0x200002c4  stack_top: 0x20002000
+current limit: 2.5 A   heartbeat timeout: 600 ms (master)   frame timeout: 800 ms (slave)

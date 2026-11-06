@@ -1,6 +1,8 @@
 # SHORTER
 Sovereign Herbage Ordered Reducer, Trimmer and Eater by Revolution (DIY 3d printable robot lawn mower)
 
+**Plan, future architecture and next steps: [`PLANNING.md`](PLANNING.md).**
+
 ## Possible Parts:
 
 - Acrylic: (dome) https://a.co/d/09qOomaM
@@ -47,6 +49,8 @@ Sovereign Herbage Ordered Reducer, Trimmer and Eater by Revolution (DIY 3d print
 - Each board is flashed separately: one at a time with the same wiring, with one firmware build as MASTER and the other as SLAVE (`Inc/configDebug.h`), or both as SINGLE if driven independently
 
 ### ESP32-C6 flasher / controller (`swd-flasher/`)
+> **Paused mid-project: see [`swd-flasher/CURRENT_STATE.md`](swd-flasher/CURRENT_STATE.md) for where things stand and what's next.**
+
 An ESP32-C6 acts as the SWD programmer for the hoverboard's GD32E230 motor controllers (bit-banged SWD, no ST-Link needed). On boot it keeps trying until it works:
 
 | LED (WS2812 on GPIO8) | Meaning |
@@ -132,6 +136,9 @@ First power-up with motor-driving firmware: use a current-limited supply (1-2 A)
 | Backups identical every run but every 32nd word 0, CPUID=0, `glitches=492` | The GD32E230 only returns valid data on the **first** RDBUFF read after an AP read, and repeated reads give 0. A majority vote over repeated RDBUFF reads always picked 0 | Read RDBUFF once; verify by reading every block twice and comparing. The simulator in `test/` now models this (`cd test && make test`) |
 | LED red forever although the backup worked | Backup mode treated "found but no image" as an error, and waited for a second board that wasn't wired | A finished backup counts as done (green); `NUM_TARGETS 1` |
 | ESP32-C6 not showing up on USB | Charge-only cable | Use a data cable |
+| Flashing: `verify mismatch` with flash `0xffff`, the same 74 halfwords every time, `FMC_STAT=0x08` | GD32E230 flash only accepts 32-bit word programming; halfword writes are sometimes rejected with PGAERR (bit 3), which wasn't checked | Program 32-bit words, treat PGAERR as an error; read-back repair pass for words lost on the wire. Option bytes: a single 32-bit write |
+| ESP32 `task_wdt` warnings during flashing | `pdMS_TO_TICKS(1)` is 0 ticks at 100 Hz, so the loop never yielded | Delay at least 1 tick |
+| Slave wheel shakes back and forth after flashing the hack firmware (LAYOUT 2.3.2) | Not confirmed; probably the wrong hall order (2.3.1 and 2.3.2 use the same hall pins in a different order) | Open: see `CURRENT_STATE.md` |
 | ESP32-C6 silent, LED dark, log shows `boot:0x4 (DOWNLOAD...) waiting for download` | The USB port's DTR/RTS lines dropped it into download mode during a reset, and it stayed there through resets | Unplug the USB cable for 5 s. Or just reflash it: `pio run -t upload` works in download mode |
 | Uploading through the board's second USB-C port ("UART", shows as "USB Single Serial") fails with `Checksum error` / `message is invalid`, and erased the ESP32's bootloader | Data corrupted through that port's USB-UART chip | **Always flash the ESP32 through the native USB port** ("USB JTAG/serial debug unit", `/dev/cu.usbmodem101`). Logs appear on both ports |
 | ESP32 port keeps disappearing every few seconds, LED dark | No bootloader (after the failed upload above), so it keeps restarting | Recovery below |
@@ -149,7 +156,7 @@ Built-in troubleshooting:
 - Slower clock: raise `SWD_HALF_PERIOD_NS` (default 500 ns, about 1 MHz)
 
 #### Controlling the boards later
-The debug ports are the only free connection (no spare holes for UART), so the plan is to control the boards over SWD. Custom firmware will read a command block in RAM (speed, steer, heartbeat) that the ESP32 writes over the debug port, and stop the motors if the heartbeat stops. The master forwards the slave's share over the original master-slave cable. This firmware change is not written yet. The older UART plan (`REMOTE_UARTBUS` on GPIO16/17) in `swd-flasher/firmware/README.md` is replaced by this.
+The debug ports are the only free connection (no spare holes for UART), so the boards are controlled over SWD. The master firmware reads a command block in RAM (one command per wheel, LEDs, heartbeat) that the ESP32 writes over the master's debug port, and stops both wheels if the heartbeat stops. The master forwards the slave's wheel and LEDs over the original master-slave cable. Built, flashed on both boards and bench-tested on the slave wheel (2026-11-06): see [`swd-flasher/API.md`](swd-flasher/API.md). Baseline movement speed is command 100 ([`PLANNING.md`](PLANNING.md)).
 
 ### Extras that might be useful:
 - Sonic sensor: HC-SR04 HCSR04 (distance sensor/material sensor)

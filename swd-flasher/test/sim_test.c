@@ -10,6 +10,7 @@
 #include <string.h>
 
 #include "../src/gd32.h"
+#include "../src/mailbox.h"
 #include "../src/swd.h"
 
 #define FLASH_SIZE 65536
@@ -32,6 +33,8 @@ typedef struct {
     uint32_t dhcsr_en, dhcsr_halt, demcr;
     uint32_t cpuid;
     int resets;
+    // SRAM (0x20000000, 8 KB) for the mailbox test
+    uint8_t ram[8192];
     // flash controller
     uint8_t flash[FLASH_SIZE];
     uint16_t ob[8];
@@ -67,6 +70,11 @@ static int mem_access(sim_t *s, int write, uint32_t addr, int size_bytes, uint32
     // for sub-word accesses, *v is in byte lanes as the MEM-AP presents them
     uint32_t a = addr & ~3u;
 
+    if (a >= 0x20000000u && a < 0x20002000u) {
+        uint8_t *p = &s->ram[a - 0x20000000u];
+        if (write) memcpy(p, v, 4); else memcpy(v, p, 4);
+        return 0;
+    }
     if (a == 0xE000ED00) { if (!write) *v = s->cpuid; return 0; }
     if (a == 0xE000EDF0) {
         if (write) {
@@ -468,6 +476,37 @@ int main(void)
     r = gd32_flash(&swd, img, len, 0, &cb);
     CHECK(r == GD32_ERROR, "protected + unlock disabled -> ERROR");
     CHECK(sim.flash[10] == (uint8_t)(10 * 7 + 3), "flash untouched");
+
+    // 7. master mailbox over SWD: the real mailbox.c writes into simulated SRAM
+    printf("--- master mailbox\n");
+    sim_reset_chip(&sim, 0, 1);
+    swd_init(&swd, &IO, &sim);
+    CHECK(swd_connect(&swd) == SWD_OK, "connect to simulated controller");
+    mbx_t mb;
+    uint32_t magic_ram = 0x3258424Du;   // 'MBX2', written by the firmware at boot
+    memcpy(&sim.ram[MBX_ADDR - 0x20000000u], &magic_ram, 4);
+    uint32_t tele[MBX_WORDS] = {0};
+    tele[0] = magic_ram;
+    float vbus = 24.1f;
+    memcpy(&tele[0x28 / 4], &vbus, 4);
+    tele[0x48 / 4] = 5;                 // hallSlave
+    tele[0x50 / 4] = 12345;             // uptimeMs
+    memcpy(&sim.ram[MBX_ADDR - 0x20000000u], tele, sizeof tele);
+    CHECK(mbx_read(&swd, &mb) == SWD_OK && mb.magic == MBX_MAGIC, "mailbox magic readable");
+    CHECK(mb.vBus == 24.1f && mb.hallSlave == 5 && mb.uptimeMs == 12345, "telemetry read at the firmware offsets");
+    CHECK(mbx_write_command(&swd, 7, -150, 80, 1) == SWD_OK, "command frame written");
+    uint32_t w[MBX_WORDS];
+    memcpy(w, &sim.ram[MBX_ADDR - 0x20000000u], sizeof w);
+    CHECK((int32_t)w[2] == -150 && (int32_t)w[3] == 80 && w[4] == 1 && w[1] == 7,
+          "cmdMaster, cmdSlave, enable and heartbeat land at the firmware offsets");
+    CHECK(mbx_read(&swd, &mb) == SWD_OK && mb.cmdMaster == -150 && mb.cmdSlave == 80 && mb.enable == 1 &&
+              mb.heartbeat == 7, "mbx_read sees what mbx_write_command wrote");
+    CHECK(mbx_write_led(&swd, MBX_LED_RED | MBX_LED_LOWER, 0xFF) == SWD_OK, "LED frame written");
+    CHECK(mbx_read(&swd, &mb) == SWD_OK && mb.ledMaster == (MBX_LED_RED | MBX_LED_LOWER) && mb.ledSlave == MBX_LED_ALL,
+          "LED masks read back (slave mask clipped to the 5 LED bits)");
+    CHECK(mbx_power_off(&swd) == SWD_OK && mbx_read(&swd, &mb) == SWD_OK && mb.power == MBX_POWER_OFF_KEY,
+          "power-off key written at 0x1C");
+    CHECK(MBX_BYTES == 0x54, "mailbox size matches the firmware (0x54)");
 
     printf("%s (%d failures)\n", g_fail ? "FAILED" : "ALL PASSED", g_fail);
     free(img);

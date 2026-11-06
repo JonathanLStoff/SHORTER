@@ -20,6 +20,7 @@
 #include "gd32.h"
 #include "led.h"
 #include "swd.h"
+#include "control.h"
 
 static const char *TAG = "flasher";
 
@@ -550,6 +551,12 @@ void app_main(void)
         ESP_LOGI(TAG, "target %s: SWDIO reads %d with pull-down, %d with pull-up (floating = 0 then 1)", t->name, pd, pu);
     }
     refresh_led();
+
+#if CONTROL_MODE == 2
+    control_run_raw(&T[0].swd);   // bench: RAM peek/poke from a host script; never returns
+#elif CONTROL_MODE
+    control_run(&T[0].swd);   // master on connector 1, slave through the master; never returns
+#endif
 
     int misses = 0;
     for (;;) {

@@ -33,7 +33,7 @@
 // Only write the embedded image to the board with this unique ID (as printed in the log, "uid=...").
 // Comment out to flash any board. Known boards:
 //   master 4337485409544c573453827e    slave 4337485416544c5734538631
-#define FLASH_ONLY_UID "4337485416544c5734538631" // slave
+#define FLASH_ONLY_UID "4337485409544c573453827e" // master
 
 // If the chip is read-protected (typical for hoverboards), erase it and remove the
 // protection. This permanently wipes the original firmware.
@@ -54,3 +54,12 @@
 // ---- Timing ----------------------------------------------------------------
 #define RETRY_DELAY_MS 300
 #define ERROR_HOLD_MS 2500 // how long red is shown before searching again
+
+// ---- Control mode (master over the debug port) -----------------------------
+// 0 = flasher (default). 1 = control: the ESP32 drives the MASTER's debug mailbox instead of
+// flashing. The slave is commanded through the master (master-slave cable), so only connector 1
+// (GPIO1/0) is used. Boots disarmed; type `help` on the console. See API.md, control.c, mailbox.h.
+#define CONTROL_MODE 1            // 2 = raw RAM peek/poke bench console (analysis/bench_slave.py)
+#define CONTROL_MAX_SPEED 1000     // command clamp, -1000..1000 is the full firmware range
+#define CONTROL_HEARTBEAT_MS 50    // command frame period while armed (firmware timeout: 600 ms)
+#define CONTROL_CMD_HOLD_MS 0      // >0: a wheel command expires after this long without repeat
